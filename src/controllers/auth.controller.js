@@ -57,9 +57,10 @@ const googleCallback = catchAsync(async (req, res) => {
   };
   const user = await userService.findOrCreateUser(userData);
   const { access, refresh } = await tokenService.generateAuthTokens(user);
-  res.cookie('Authorization', `Bearer ${access.token}`, { maxAge: access.expires, httpOnly: true });
-  res.cookie('refresh_token', refresh.token, { maxAge: refresh.expires, httpOnly: true });
-  res.status(httpStatus.NO_CONTENT).send();
+  res.cookie('authorization', access.token, { maxAge: access.expires });
+  res.cookie('refresh_token', refresh.token, { maxAge: refresh.expires });
+  res.cookie('user_id', encodeURI(user._id));
+  res.redirect('http://localhost:3001');
 });
 
 module.exports = {
