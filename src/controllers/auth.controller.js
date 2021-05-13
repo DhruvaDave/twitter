@@ -47,6 +47,21 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const googleCallback = catchAsync(async (req, res) => {
+  const { email, name, picture, email_verified: emailVerified } = req.user._json;
+  const userData = {
+    name,
+    email,
+    image: picture,
+    emailVerified,
+  };
+  const user = await userService.findOrCreateUser(userData);
+  const { access, refresh } = await tokenService.generateAuthTokens(user);
+  res.cookie('Authorization', `Bearer ${access.token}`, { maxAge: access.expires, httpOnly: true });
+  res.cookie('refresh_token', refresh.token, { maxAge: refresh.expires, httpOnly: true });
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   register,
   login,
@@ -56,4 +71,5 @@ module.exports = {
   resetPassword,
   sendVerificationEmail,
   verifyEmail,
+  googleCallback,
 };

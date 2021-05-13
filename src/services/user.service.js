@@ -80,8 +80,17 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
+const findOrCreateUser = async (userData) => {
+  let user = await getUserByEmail(userData.email);
+  if (!user) {
+    user = await createUser(userData);
+  }
+  return user;
+};
+
 module.exports = {
   createUser,
+  findOrCreateUser,
   queryUsers,
   getUserById,
   getUserByEmail,

@@ -38,6 +38,8 @@ module.exports = {
   mongoose: {
     url: envVars.MONGODB_URL + (envVars.NODE_ENV === 'test' ? '-test' : ''),
     options: {
+      user: envVars.MONGO_USER,
+      pass: envVars.MONGO_PASS,
       useCreateIndex: true,
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -49,6 +51,12 @@ module.exports = {
     refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
     resetPasswordExpirationMinutes: envVars.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
     verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
+  },
+  auth: {
+    google: {
+      clientId: envVars.GOOGLE_CLIENT_ID,
+      secretId: envVars.GOOGLE_CLIENT_SECRET,
+    },
   },
   email: {
     smtp: {
